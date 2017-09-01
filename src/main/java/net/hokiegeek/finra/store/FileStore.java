@@ -1,6 +1,7 @@
 package net.hokiegeek.finra.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -15,12 +16,14 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 public class FileStore {
-    private FileMetadataDB db = new MongoMetadataDB(); // TODO: inject
+    @Qualifier("${metadata-database}")
+    private final FileMetadataDB db;
     private final ApplicationContext appContext;
 
     @Autowired
-    public FileStore(ApplicationContext context) {
+    public FileStore(ApplicationContext context, FileMetadataDB db) {
         this.appContext = context;
+        this.db = db;
     }
 
     @Value("${upload-location}")
