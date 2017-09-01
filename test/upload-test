@@ -8,3 +8,11 @@ FOOBAR
 EOF
 
 curl -F "file=@${tmp}" http://localhost:8080/upload
+echo ""
+
+curl http://localhost:8080/info/1
+echo ""
+
+curl -o /tmp/finra http://localhost:8080/file/1
+
+cat /tmp/finra
