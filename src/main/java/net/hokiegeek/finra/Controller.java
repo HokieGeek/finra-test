@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.hokiegeek.finra.responses.MetadataResponse;
 import net.hokiegeek.finra.responses.UploadResponse;
+import net.hokiegeek.finra.store.FileMetadata;
 import net.hokiegeek.finra.store.FileStore;
 
 @RestController
@@ -35,6 +37,12 @@ public class Controller {
         // log.finest("[AFP] Uploading file: " + file.getName());
         System.out.println("[AFP] Uploading file: " + file.getOriginalFilename());
         return new UploadResponse(this.store.storeFile(file));
+    }
+
+    @GetMapping("/info/{id:.*}")
+    public MetadataResponse metadata(@PathVariable Long id) {
+        System.out.println("[AFP] Retrieving metadata: " + id);
+        return new MetadataResponse(this.store.getFileMetadata(id));
     }
 
     @GetMapping("/file/{id:.*}")
