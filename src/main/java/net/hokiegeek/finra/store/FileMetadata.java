@@ -2,11 +2,19 @@ package net.hokiegeek.finra.store;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FileMetadata {
     @Id private String dbId;
 
     private String id;
     private String path;
+    private Map<String, String> metadata;
+
+    public FileMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
+    }
 
     public String getId() {
         return id;
@@ -22,6 +30,10 @@ public class FileMetadata {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Map<String, String> getMetadata() {
+        return new HashMap(this.metadata);
     }
 
     @Override

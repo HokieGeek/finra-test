@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 @Service
 public class FileStore {
@@ -29,11 +30,11 @@ public class FileStore {
     @Value("${upload-location}")
     private String upload_location;
 
-    public String storeFile(MultipartFile file) { // TODO: needs to throw IOException, I think
+    public String storeFile(MultipartFile file, Map<String, String> metadata) { // TODO: needs to throw IOException, I think
         String id = "None"; // TODO
 
         // TODO: use metadata passed in
-        FileMetadata metadata = new FileMetadata();
+        FileMetadata fileMedatadata = new FileMetadata(metadata);
 
         try {
             // Create the ID
@@ -44,8 +45,8 @@ public class FileStore {
             Path path = Paths.get(upload_location, file.getOriginalFilename());
             Files.write(path, bytes);
 
-            metadata.setId(id);
-            metadata.setPath(path.toString());
+            fileMedatadata.setId(id);
+            fileMedatadata.setPath(path.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -53,7 +54,7 @@ public class FileStore {
         }
 
         // Store the metadata to the database
-        db.store(metadata);
+        db.store(fileMedatadata);
 
         return id;
     }

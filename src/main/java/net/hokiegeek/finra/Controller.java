@@ -38,7 +38,7 @@ public class Controller {
         // TODO: handle metadata
         log.finest("Received file to upload: " + file.getOriginalFilename());
         // TODO: handle error
-        return new UploadResponse(this.store.storeFile(file));
+        return new UploadResponse(this.store.storeFile(file, metadata));
     }
 
     @GetMapping("/info/{id:.*}")
