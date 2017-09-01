@@ -10,7 +10,8 @@ cat << EOF > ${created}
 ${@:-"SOMETHING"}
 EOF
 
-id=$(curl -v -F "file=@${created}" ${server}/upload | sed -r 's/[{}]//g;s/.*:(.*)$/\1/')
+id=$(curl -v -F "file=@${created}" -F "blah=foo" \
+    ${server}/upload | sed -r 's/[{}]//g;s/.*:(.*)$/\1/')
 echo "ID: ${id}"
 
 curl -v ${server}/info/${id}

@@ -2,6 +2,7 @@ package net.hokiegeek.finra;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -32,9 +33,10 @@ public class Controller {
     }
 
     @PostMapping("/upload")
-    public UploadResponse upload(@RequestParam("file") MultipartFile file) {
+    public UploadResponse upload(@RequestParam("file") MultipartFile file, @RequestParam Map<String, String> metadata) {
         // log.setLevel(Level.FINEST);
         // log.finest("[AFP] Uploading file: " + file.getName());
+        // metadata.forEach((k,v)->System.out.println("Metadata: " + k + " = " + v));
         System.out.println("[AFP] Uploading file: " + file.getOriginalFilename());
         return new UploadResponse(this.store.storeFile(file));
     }
