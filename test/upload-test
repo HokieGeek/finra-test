@@ -1,18 +1,22 @@
 #!/bin/bash
 
-tmp=$(mktemp)
-trap 'rm -rf ${tmp}' EXIT
+server="http://localhost:8080"
 
-cat << EOF > ${tmp}
-FOOBAR
+created=$(mktemp)
+downloaded=$(mktemp)
+trap 'rm -rf ${created} ${downloaded}' EXIT
+
+cat << EOF > ${created}
+${@:-"SOMETHING"}
 EOF
 
-curl -F "file=@${tmp}" http://localhost:8080/upload
+id=$(curl -v -F "file=@${created}" ${server}/upload | sed -r 's/[{}]//g;s/.*:(.*)$/\1/')
+echo "ID: ${id}"
+
+curl -v ${server}/info/${id}
 echo ""
 
-curl http://localhost:8080/info/1
-echo ""
+curl -v -o ${downloaded} ${server}/file/${id}
 
-curl -o /tmp/finra http://localhost:8080/file/1
-
-cat /tmp/finra
+cat ${downloaded}
+diff -s ${created} ${downloaded}
