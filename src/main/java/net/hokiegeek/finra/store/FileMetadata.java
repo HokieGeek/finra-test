@@ -1,6 +1,10 @@
 package net.hokiegeek.finra.store;
 
+import org.springframework.data.annotation.Id;
+
 public class FileMetadata {
+    @Id private String dbId;
+
     private String id;
     private String path;
 
@@ -18,5 +22,10 @@ public class FileMetadata {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

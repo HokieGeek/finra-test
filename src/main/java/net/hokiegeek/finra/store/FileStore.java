@@ -42,8 +42,10 @@ public class FileStore {
             // Save the file to the upload folder
             byte[] bytes = file.getBytes();
             Path path = Paths.get(upload_location, file.getOriginalFilename());
-            metadata.setPath(path.toString());
             Files.write(path, bytes);
+
+            metadata.setId(id);
+            metadata.setPath(path.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {

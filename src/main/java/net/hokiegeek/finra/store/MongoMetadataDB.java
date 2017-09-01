@@ -1,22 +1,25 @@
 package net.hokiegeek.finra.store;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 @Component("mongodb")
-// public class MongoMetadataDB implements FileMetadataDB, MongoRepository<FileMetadata, String> {
 public class MongoMetadataDB implements FileMetadataDB {
-    private FileMetadata dummyMetadata = null;
+    private MongoDB db;
+
+    @Autowired
+    public MongoMetadataDB(MongoDB db) {
+        this.db = db;
+        this.db.deleteAll();
+    }
 
     @Override
     public void store(FileMetadata metadata) {
-        // TODO
-        dummyMetadata = metadata;
+        this.db.save(metadata);
     }
 
     @Override
     public FileMetadata getById(String id) {
-        // TODO
-        return dummyMetadata;
+        return this.db.findById(id);
     }
 }
