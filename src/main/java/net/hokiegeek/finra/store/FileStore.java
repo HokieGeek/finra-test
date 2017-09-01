@@ -1,6 +1,7 @@
 package net.hokiegeek.finra.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class FileStore {
         this.appContext = context;
     }
 
-    private static String UPLOAD_FOLDER = "/var/cache/finra-test"; // TODO: read from file
+    @Value("${upload-location}")
+    private String upload_location;
 
     public String storeFile(MultipartFile file) { // TODO: needs to throw IOException, I think
         String id = "None"; // TODO
@@ -36,7 +38,7 @@ public class FileStore {
 
             // Save the file to the upload folder
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_FOLDER, file.getOriginalFilename());
+            Path path = Paths.get(upload_location, file.getOriginalFilename());
             metadata.setPath(path.toString());
             Files.write(path, bytes);
         } catch (IOException e) {
