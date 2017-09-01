@@ -10,14 +10,14 @@ cat << EOF > ${created}
 ${@:-"SOMETHING"}
 EOF
 
-id=$(curl -v -F "file=@${created}" -F "blah=foo" \
-    ${server}/upload | sed -r 's/[{}]//g;s/.*:(.*)$/\1/')
+id=$(curl --silent -F "file=@${created}" -F "blah=foo" \
+    ${server}/upload | sed -r 's/[{}]//g;s/.*:"([^"]*)"$/\1/')
 echo "ID: ${id}"
 
-curl -v ${server}/info/${id}
+curl --silent ${server}/info/${id}
 echo ""
 
-curl -v -o ${downloaded} ${server}/file/${id}
+curl --silent -o ${downloaded} ${server}/file/${id}
 
 cat ${downloaded}
 diff -s ${created} ${downloaded}

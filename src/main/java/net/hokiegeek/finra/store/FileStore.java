@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class FileStore {
@@ -31,7 +32,7 @@ public class FileStore {
 
         try {
             // Create the ID
-            id = Util.getSha1FromInputStream(file.getInputStream());
+            id = Utils.getSha1FromInputStream(file.getInputStream());
 
             // Save the file to the upload folder
             byte[] bytes = file.getBytes();
@@ -39,6 +40,8 @@ public class FileStore {
             metadata.setPath(path.toString());
             Files.write(path, bytes);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 

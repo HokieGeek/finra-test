@@ -1,16 +1,27 @@
 package net.hokiegeek.finra.store;
 
-import java.util.concurrent.atomic.AtomicLong;
-
+import java.security.MessageDigest;
 import java.io.InputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Util {
-    private static final AtomicLong nextId = new AtomicLong();
-    public static String getSha1FromInputStream(InputStream stream) {
-        // TODO: you know... do it correctly..
-        Long id = nextId.incrementAndGet();
-        return id.toString();
+public class Utils {
+    public static String getSha1FromInputStream(InputStream inputStream) throws IOException, NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+
+        int numBytesRead = 0;
+        final byte[] buffer = new byte[1024];
+        while (numBytesRead != -1) {
+            numBytesRead = inputStream.read(buffer);
+            if (numBytesRead > 0) {
+                digest.update(buffer, 0, numBytesRead);
+            }
+        }
+
+        return new HexBinaryAdapter().marshal(digest.digest());
     }
 }
