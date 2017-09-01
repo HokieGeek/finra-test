@@ -1,0 +1,10 @@
+#!/bin/bash
+
+tmp=$(mktemp)
+trap 'rm -rf ${tmp}' EXIT
+
+cat << EOF > ${tmp}
+FOOBAR
+EOF
+
+curl -F "file=@${tmp}" http://localhost:8080/upload
