@@ -65,7 +65,7 @@ public class ControllerTest {
                 .willReturn(new UploadResponse(dummyId));
 
         this.mvc.perform(post("/upload").accept(MediaType.MULTIPART_FORM_DATA)
-                    .param("file", mockMultipartFile.getName())
+                    .file(mockMultipartFile)
                     .param("rab", "oof")
                 )
                 .andExpect(status().isOk()).andExpect(content().string(dummyId));
