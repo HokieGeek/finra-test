@@ -1,0 +1,10 @@
+#!/bin/bash
+
+here=$(cd ${0%/*}; pwd)
+cd ${here}/..
+
+docker-compose up
+
+${here}/upload-test $(date)
+
+docker-compose down

@@ -1,0 +1,16 @@
+version: '2'
+services:
+    db:
+        image: mongo:latest
+        ports:
+            - 27017:27017
+    finra:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+        depends_on:
+            - db
+        logging:
+            driver: json-file
