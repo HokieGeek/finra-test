@@ -1,7 +1,5 @@
 package net.hokiegeek.finra.store;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -15,7 +13,7 @@ import java.nio.file.Paths;
 
 @Service
 public class FileStore {
-    private final AtomicLong nextId = new AtomicLong();
+    private FileMetadataDB db = new MongoMetadataDB(); // TODO: inject
     private final ApplicationContext appContext;
 
     @Autowired
@@ -23,18 +21,19 @@ public class FileStore {
         this.appContext = context;
     }
 
-    private static String UPLOAD_FOLDER = "/var/cache/finra-test";
+    private static String UPLOAD_FOLDER = "/var/cache/finra-test"; // TODO: read from file
 
-    private FileMetadata dummyMetadata = null;
+    public String storeFile(MultipartFile file) { // TODO: needs to throw IOException, I think
+        String id = "None"; // TODO
 
-    public Long storeFile(MultipartFile file) {
-        // TODO: handle the file
-        Long id = nextId.incrementAndGet();
-
+        // TODO: use metadata passed in
         FileMetadata metadata = new FileMetadata();
 
-        // Save the file to the upload folder
         try {
+            // Create the ID
+            id = Util.getSha1FromInputStream(file.getInputStream());
+
+            // Save the file to the upload folder
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOAD_FOLDER, file.getOriginalFilename());
             metadata.setPath(path.toString());
@@ -43,16 +42,17 @@ public class FileStore {
             e.printStackTrace();
         }
 
-        dummyMetadata = metadata;
+        // Store the metadata to the database
+        db.store(metadata);
 
         return id;
     }
 
-    public FileMetadata getFileMetadata(Long id) {
-        return dummyMetadata;
+    public FileMetadata getFileMetadata(String id) {
+        return db.getById(id);
     }
 
-    public Resource getFileAsResource(Long id) {
+    public Resource getFileAsResource(String id) {
         FileMetadata metadata = this.getFileMetadata(id);
         Resource resource = appContext.getResource("file://" + metadata.getPath());
         return resource;

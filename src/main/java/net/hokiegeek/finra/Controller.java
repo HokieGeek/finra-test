@@ -34,22 +34,20 @@ public class Controller {
 
     @PostMapping("/upload")
     public UploadResponse upload(@RequestParam("file") MultipartFile file, @RequestParam Map<String, String> metadata) {
-        // log.setLevel(Level.FINEST);
-        // log.finest("[AFP] Uploading file: " + file.getName());
-        // metadata.forEach((k,v)->System.out.println("Metadata: " + k + " = " + v));
-        System.out.println("[AFP] Uploading file: " + file.getOriginalFilename());
+        // TODO: handle metadata
+        log.finest("Received file to upload: " + file.getOriginalFilename());
+        // TODO: handle error
         return new UploadResponse(this.store.storeFile(file));
     }
 
     @GetMapping("/info/{id:.*}")
-    public MetadataResponse metadata(@PathVariable Long id) {
-        System.out.println("[AFP] Retrieving metadata: " + id);
+    public MetadataResponse metadata(@PathVariable String id) {
         return new MetadataResponse(this.store.getFileMetadata(id));
     }
 
     @GetMapping("/file/{id:.*}")
     @ResponseBody
-    public ResponseEntity<Resource> streamFile(@PathVariable Long id) {
+    public ResponseEntity<Resource> streamFile(@PathVariable String id) {
         Resource file = this.store.getFileAsResource(id);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);

@@ -1,13 +1,13 @@
 package net.hokiegeek.finra.responses;
 
 public class UploadResponse {
-    private final long id;
+    private final String id;
 
-    public UploadResponse(long id) {
+    public UploadResponse(String id) {
         this.id = id;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 }
