@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +36,7 @@ public class Controller {
     }
 
     @PostMapping("/upload")
-    public UploadResponse upload(@RequestParam("file") MultipartFile file,
+    public UploadResponse upload(@RequestPart("file") MultipartFile file,
                                  @RequestParam Map<String, String> metadata) {
         log.finest("Received file to upload: " + file.getOriginalFilename());
         // TODO: handle errors

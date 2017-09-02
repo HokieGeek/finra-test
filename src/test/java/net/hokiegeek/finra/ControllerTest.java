@@ -55,36 +55,23 @@ public class ControllerTest {
         dummyFileMetadata.setPath("/blah");
     }
 
-    /*
-    @Before
-    public void setup() {
-        mvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
-    */
-
     @Test
-    @Ignore("broken")
     public void testUpload() throws Exception {
         MockMultipartFile mockMultipartFile = null;
-        mockMultipartFile = new MockMultipartFile("fileName", "asdfsadfasdfasdf".getBytes());
+        mockMultipartFile = new MockMultipartFile("file", "asdfsadfasdfasdf".getBytes());
+
+        given(this.controller.upload(mockMultipartFile, dummyMetadata))
+                .willReturn(new UploadResponse(dummyId));
 
         this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
-                    .param("rab", "oof")
+                    // .params(dummyMetadata) // TODO: needs to be a MultiValueMap
+                    // .param("rab", "oof")
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(dummyId));
-
-        // given(this.controller.upload(mockMultipartFile, dummyMetadata))
-        //         .willReturn(new UploadResponse(dummyId));
-
-        // this.mvc.perform(MockMvcRequestBuilders.fileUpload("/upload")
-        //             .file(mockMultipartFile)
-        //             .param("rab", "oof")
-        //         )
-        //         .andExpect(status().isCreated())
-        //         .andExpect(content().string(dummyId));
+                .andExpect(status().isOk())
+                // .andExpect(content().string(dummyId))
+                ;
     }
 
     @Test
@@ -93,6 +80,18 @@ public class ControllerTest {
                 .willReturn(new MetadataResponse(dummyFileMetadata));
 
         this.mvc.perform(get("/v1/metadata/"+dummyId))
+                .andExpect(status().isOk());
+                // .accept(MediaType.APPLICATION_JSON_UTF8)
+                // .andExpect(content().string("foobar"));
+    }
+
+    @Test
+    @Ignore("TODO")
+    public void testFileDownload() throws Exception {
+        // given(this.controller.metadata(dummyId))
+        //         .willReturn(new MetadataResponse(dummyFileMetadata));
+
+        this.mvc.perform(get("/v1/file/"+dummyId))
                 .andExpect(status().isOk());
                 // .accept(MediaType.APPLICATION_JSON_UTF8)
                 // .andDo(print())

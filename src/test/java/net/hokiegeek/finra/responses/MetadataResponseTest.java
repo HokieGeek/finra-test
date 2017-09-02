@@ -22,17 +22,6 @@ public class MetadataResponseTest {
         dummyMetadata.put("key", "val");
 
         dummyFileMetadata = new FileMetadata(dummyMetadata);
-        dummyFileMetadata.setPath("/var/foo/bar");
-    }
-
-    @Test
-    public void testGetFilename() {
-        Path path = Paths.get(dummyFileMetadata.getPath());
-        String expectedFilename = path.getName(path.getNameCount()-1).toString();
-
-        MetadataResponse response = new MetadataResponse(dummyFileMetadata);
-
-        assertEquals(expectedFilename, response.getFilename());
     }
 
     @Test
