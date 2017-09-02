@@ -69,7 +69,7 @@ public class FileStore {
         return appContext.getResource("file://" + record.getStoredPath());
     }
 
-    public List<FileRecord> getRecordsByMetadata(String field, String value) {
-        return db.getByMetadata(field, value);
+    public List<FileRecord> getRecordsByMetadata(Map<String, String> metadata) {
+        return db.getByMetadata(metadata);
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -75,9 +76,8 @@ public class Controller {
 
     @PostMapping("/search")
     public List<String> search(@RequestParam Map<String, String> criterion) {
-        List<String> ids = new ArrayList<>();
-        // TODO: convert FileRecord to String
-        // criterion.forEach((field, value) -> ids.addAll(this.store.getRecordsByMetadata(field, value)));
-        return ids;
+        return this.store.getRecordsByMetadata(criterion).stream()
+            .map(e -> e.getId())
+            .collect(Collectors.toList());
     }
 }

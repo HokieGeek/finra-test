@@ -1,10 +1,12 @@
 package net.hokiegeek.finra.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component("mongodb")
 public class MongoMetadataDB implements FileRecordDB {
@@ -27,10 +29,9 @@ public class MongoMetadataDB implements FileRecordDB {
     }
 
     @Override
-    public List<FileRecord> getByMetadata(String field, String value) {
-        // return this.db.findAll(id);
-        List<FileRecord> ids = new ArrayList<>();
-        // TODO
-        return ids;
+    public List<FileRecord> getByMetadata(Map<String, String> metadata) {
+        FileRecord rec = new FileRecord();
+        rec.setMetadata(metadata);
+        return this.db.findAll(Example.of(rec));
     }
 }

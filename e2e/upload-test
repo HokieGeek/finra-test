@@ -15,8 +15,9 @@ declare -A uploadedFiles
 declare -A uploadedFilesParams
 
 genMetadata() {
-    local f=$1
-    stat --printf="user=%U\npermissions=%a\ncreated=%Y" $1
+    local ficha=$1
+    local extra_metadata=$2
+    stat --printf="user=%U\npermissions=%a\ncreated=%Y\n${extra_metadata}" ${ficha}
 }
 
 getMetadataFromJSON() {
@@ -25,8 +26,8 @@ getMetadataFromJSON() {
 }
 
 uploadFile() {
-    # local created=$(tmp)
     local created=$1
+    local extra_metadata=$2
 
     ## Generate random data for the file
     cat << EOF > ${created}
@@ -35,7 +36,7 @@ EOF
 
     ## Create some parameters
     params=()
-    for param in $(genMetadata ${created}); do
+    for param in $(genMetadata ${created} ${extra_metadata}); do
         params+=("-F" "${param}")
     done
 
@@ -50,7 +51,7 @@ EOF
 verifyFile() {
     local id=$1
 
-    # TODO
+    # TODO: Actually use this
     curl --silent ${server}/metadata/${id}
     echo ""
 
@@ -60,10 +61,17 @@ verifyFile() {
     diff ${uploadedFiles[${id}]} ${downloaded}
 }
 
+search_metadata="extra=foo"
+
 ## Generate a random number of files between 1 and 10
 for i in $(seq 1 $((RANDOM%11))); do
     created=$(tmp)
-    id=$(uploadFile ${created})
+
+    # Add extra metadata for searching
+    (( $((RANDOM%3)) == 0 )) && extra_metadata=${search_metadata}
+    id=$(uploadFile ${created} ${extra_metadata})
+    unset extra_metadata
+
     uploadedFiles[${id}]=${created}
 done
 
@@ -71,3 +79,8 @@ done
 for id in "${!uploadedFiles[@]}"; do
     verifyFile ${id} || exit 1
 done
+
+echo "Testing search"
+curl --silent \
+     -F "extra=foo" \
+     ${server}/search

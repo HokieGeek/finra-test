@@ -100,4 +100,19 @@ public class ControllerTest {
                 // .andDo(print())
                 // .andExpect(content().string("foobar"));
     }
+
+    @Test
+    @Ignore("TODO")
+    public void testSearch() throws Exception {
+        // given(this.controller.metadata(dummyId))
+        //         .willReturn(new MetadataResponse(dummyFileRecord));
+
+        this.mvc.perform(post("/v1/search))
+                .param("", "")
+                // .andExpect(status().isOk())
+                ;
+                // .accept(MediaType.APPLICATION_JSON_UTF8)
+                // .andDo(print())
+                // .andExpect(content().string("foobar"));
+    }
 }
