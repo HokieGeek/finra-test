@@ -18,23 +18,23 @@ To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the
 ## API
 
 #### Upload file
-http://localhost:8080/upload
+http://localhost:8080/v1/upload
 
 Expects multipart post where the file is parameter ```file``` and all other parameters are assumed to be metadata.
 Returns the ID generated for the file.
 
 #### Retrieve file metadata
-http://localhost:8080/metadata/{id}
+http://localhost:8080/v1/metadata/{id}
 
 Given a file ID, it returns the filename and all metadata associated with the file.
 
 #### Retrieve file
-http://localhost:8080/file/{id}
+http://localhost:8080/v1/file/{id}
 
 Given a file ID, it initiates a content stream of the file.
 
 #### Retrieve IDs of files matching metadata
-http://localhost:8080/search
+http://localhost:8080/v1/search
 
 Expects multipart post where the parameters are the search criteria matching the metadata.
 Returns a list of matching file IDs.
