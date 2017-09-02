@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.hokiegeek.finra.responses.MetadataResponse;
 import net.hokiegeek.finra.responses.UploadResponse;
-import net.hokiegeek.finra.store.FileMetadata;
+import net.hokiegeek.finra.store.FileRecord;
 import net.hokiegeek.finra.store.FileStore;
 
 @RestController
@@ -48,7 +48,7 @@ public class Controller {
 
     @GetMapping("/metadata/{id:.*}")
     public MetadataResponse metadata(@PathVariable String id) {
-        FileMetadata metadata = this.store.getFileMetadata(id);
+        FileRecord metadata = this.store.getFileRecord(id);
 
         MetadataResponse response = new MetadataResponse();
         response.setMetadata(metadata.getMetadata());

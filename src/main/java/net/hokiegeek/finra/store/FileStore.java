@@ -18,11 +18,11 @@ import java.util.Map;
 @Service
 public class FileStore {
     @Qualifier("${metadata.database}")
-    private final FileMetadataDB db;
+    private final FileRecordDB db;
     private final ApplicationContext appContext;
 
     @Autowired
-    public FileStore(ApplicationContext context, FileMetadataDB db) {
+    public FileStore(ApplicationContext context, FileRecordDB db) {
         this.appContext = context;
         this.db = db;
     }
@@ -33,39 +33,38 @@ public class FileStore {
     public String storeFile(MultipartFile file, Map<String, String> metadata) { // TODO: needs to throw IOException, I think
         String id = "None"; // TODO
 
-        // TODO: use metadata passed in
-        FileMetadata fileMedatadata = new FileMetadata(metadata);
+        FileRecord record = new FileRecord(metadata);
 
         try {
             // Create the ID
             id = Utils.getSha1FromInputStream(file.getInputStream());
+            record.setId(id);
 
             // Save the file to the upload folder
             byte[] bytes = file.getBytes();
             Path path = Paths.get(upload_location, file.getOriginalFilename());
             Files.write(path, bytes);
 
-            fileMedatadata.setId(id);
-            fileMedatadata.setPath(path.toString());
+            record.setPath(path.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        // Store the metadata to the database
-        db.store(fileMedatadata);
+        // Store the record to the database
+        db.store(record);
 
         return id;
     }
 
-    public FileMetadata getFileMetadata(String id) {
+    public FileRecord getFileRecord(String id) {
         return db.getById(id);
     }
 
     public Resource getFileAsResource(String id) {
-        FileMetadata metadata = this.getFileMetadata(id);
-        Resource resource = appContext.getResource("file://" + metadata.getPath());
+        FileRecord record = this.getFileRecord(id);
+        Resource resource = appContext.getResource("file://" + record.getPath());
         return resource;
     }
 }

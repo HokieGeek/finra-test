@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("mongodb")
-public class MongoMetadataDB implements FileMetadataDB {
+public class MongoMetadataDB implements FileRecordDB {
     private MongoDB db;
 
     @Autowired
@@ -14,12 +14,12 @@ public class MongoMetadataDB implements FileMetadataDB {
     }
 
     @Override
-    public void store(FileMetadata metadata) {
-        this.db.save(metadata);
+    public void store(FileRecord record) {
+        this.db.save(record);
     }
 
     @Override
-    public FileMetadata getById(String id) {
+    public FileRecord getById(String id) {
         return this.db.findById(id);
     }
 }

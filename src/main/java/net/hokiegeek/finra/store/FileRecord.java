@@ -5,14 +5,14 @@ import org.springframework.data.annotation.Id;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileMetadata {
+public class FileRecord {
     @Id private String dbId;
 
     private String id;
     private String path;
     private Map<String, String> metadata;
 
-    public FileMetadata(Map<String, String> metadata) {
+    public FileRecord(Map<String, String> metadata) {
         this.metadata = metadata;
     }
 

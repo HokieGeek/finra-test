@@ -20,8 +20,8 @@ public class FileStoreTest {
 
     @Test
     @Ignore("TODO")
-    public void testGetFileMetadata() {
-        // FileMetadata getFileMetadata(String id)
+    public void testGetFileRecord() {
+        // FileRecord getFileRecord(String id)
         // return db.getById(id);
     }
 

@@ -19,7 +19,7 @@ import java.util.Map;
 
 import net.hokiegeek.finra.responses.UploadResponse;
 import net.hokiegeek.finra.responses.MetadataResponse;
-import net.hokiegeek.finra.store.FileMetadata;
+import net.hokiegeek.finra.store.FileRecord;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -41,7 +41,7 @@ public class ControllerTest {
 
     private static String dummyId;
     private static Map<String, String> dummyMetadata;
-    private static FileMetadata dummyFileMetadata;
+    private static FileRecord dummyFileRecord;
 
     @BeforeClass
     public static void setupData() {
@@ -50,9 +50,9 @@ public class ControllerTest {
         dummyMetadata = new Hashtable<>();
         dummyMetadata.put("rab", "oof");
 
-        dummyFileMetadata = new FileMetadata(dummyMetadata);
-        dummyFileMetadata.setId(dummyId);
-        dummyFileMetadata.setPath("/blah");
+        dummyFileRecord = new FileRecord(dummyMetadata);
+        dummyFileRecord.setId(dummyId);
+        dummyFileRecord.setPath("/blah");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ControllerTest {
     @Test
     public void testMetadata() throws Exception {
         given(this.controller.metadata(dummyId))
-                .willReturn(new MetadataResponse(dummyFileMetadata));
+                .willReturn(new MetadataResponse(dummyFileRecord));
 
         this.mvc.perform(get("/v1/metadata/"+dummyId))
                 .andExpect(status().isOk());
@@ -89,7 +89,7 @@ public class ControllerTest {
     @Ignore("TODO")
     public void testFileDownload() throws Exception {
         // given(this.controller.metadata(dummyId))
-        //         .willReturn(new MetadataResponse(dummyFileMetadata));
+        //         .willReturn(new MetadataResponse(dummyFileRecord));
 
         this.mvc.perform(get("/v1/file/"+dummyId))
                 .andExpect(status().isOk());
