@@ -52,6 +52,7 @@ verifyFile() {
     local id=$1
 
     # TODO: Actually use this
+    echo -en "${id}\n\t"
     curl --silent ${server}/metadata/${id}
     echo ""
 
@@ -83,4 +84,4 @@ done
 echo "Testing search"
 curl --silent \
      -F "extra=foo" \
-     ${server}/search
+     ${server}/search | sed -r 's/(\[|])//g;s/,/\n/g'
