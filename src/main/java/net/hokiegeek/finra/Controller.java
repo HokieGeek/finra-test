@@ -41,7 +41,7 @@ public class Controller {
         return new UploadResponse(this.store.storeFile(file, metadata));
     }
 
-    @GetMapping("/info/{id:.*}")
+    @GetMapping("/metadata/{id:.*}")
     public MetadataResponse metadata(@PathVariable String id) {
         return new MetadataResponse(this.store.getFileMetadata(id));
     }
