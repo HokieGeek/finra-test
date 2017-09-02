@@ -56,6 +56,6 @@ Available configuration options:
 
 ## Testing
 
-To run unit tests, issue a ```./gradlew test``` command.
+To run very basic unit tests, issue a ```./gradlew test``` command.
 
 To run a very basic end-to-end integration test, execute the command ```e2e/test```.
