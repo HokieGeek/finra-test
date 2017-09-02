@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -66,5 +68,9 @@ public class FileStore {
         FileRecord record = this.getFileRecord(id);
         Resource resource = appContext.getResource("file://" + record.getPath());
         return resource;
+    }
+
+    public List<FileRecord> getRecordsByMetadata(String field, String value) {
+        return db.getByMetadata(field, value);
     }
 }

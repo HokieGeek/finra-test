@@ -1,10 +1,10 @@
 package net.hokiegeek.finra;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -68,7 +68,8 @@ public class Controller {
     @PostMapping("/search")
     public List<String> search(@RequestParam Map<String, String> criterion) {
         List<String> ids = new ArrayList<>();
-        // TODO: for each criteria, do a find in the database
+        // TODO: convert FileRecord to String
+        // criterion.forEach((field, value) -> ids.addAll(this.store.getRecordsByMetadata(field, value)));
         return ids;
     }
 }
