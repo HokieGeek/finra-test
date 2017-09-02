@@ -6,14 +6,14 @@ Simple REST service for storing files and associated metadata using Spring and M
 ## Execution
 
 ### Starting
-To start the service, simply issue the following command: ```docker-compose up```
+To start the service, simply issue the following command: ```docker-compose up```.
 
 This will start the MongoDB instance as well as build and run the Spring Boot service.
 
 To start it in daemon mode, pass the option ```-d``` to the compose call.
 
 ### Stopping
-To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the ```docker-compose down``` command
+To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the ```docker-compose down``` command.
 
 ## API
 
@@ -24,7 +24,7 @@ Expects multipart post where the file is parameter ```file``` and all other para
 Returns the ID generated for the file.
 
 #### Retrieve file metadata
-http://localhost:8080/info/{id}
+http://localhost:8080/metadata/{id}
 
 Given a file ID, it returns the filename and all metadata associated with the file.
 
