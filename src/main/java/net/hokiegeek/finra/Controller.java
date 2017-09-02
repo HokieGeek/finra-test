@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -31,7 +32,7 @@ import net.hokiegeek.finra.store.FileStore;
 @RequestMapping("/v${api.version}")
 public class Controller {
 
-    private final Logger log = Logger.getLogger(Controller.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
     private final FileStore store;
 
     @Autowired
@@ -42,7 +43,7 @@ public class Controller {
     @PostMapping("/upload")
     public UploadResponse upload(@RequestPart("file") MultipartFile file,
                                  @RequestParam Map<String, String> metadata) {
-        log.finest("Received file to upload: " + file.getOriginalFilename());
+        log.info("Received file to upload: " + file.getOriginalFilename());
 
         String id = "";
         try {
