@@ -49,7 +49,10 @@ public class Controller {
     @GetMapping("/metadata/{id:.*}")
     public MetadataResponse metadata(@PathVariable String id) {
         FileMetadata metadata = this.store.getFileMetadata(id);
-        return new MetadataResponse(metadata);
+
+        MetadataResponse response = new MetadataResponse();
+        response.setMetadata(metadata.getMetadata());
+        return response;
     }
 
     @GetMapping("/file/{id:.*}")
