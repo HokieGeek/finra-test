@@ -1,5 +1,6 @@
 package net.hokiegeek.finra;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,27 +42,34 @@ public class Controller {
     public UploadResponse upload(@RequestPart("file") MultipartFile file,
                                  @RequestParam Map<String, String> metadata) {
         log.finest("Received file to upload: " + file.getOriginalFilename());
-        // TODO: handle errors
-        String id = this.store.storeFile(file, metadata);
+
+        String id = "";
+        try {
+            id = this.store.storeFile(file, metadata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return new UploadResponse(id);
     }
 
     @GetMapping("/metadata/{id:.*}")
     public MetadataResponse metadata(@PathVariable String id) {
-        FileRecord metadata = this.store.getFileRecord(id);
+        FileRecord record = this.store.getFileRecord(id);
 
         MetadataResponse response = new MetadataResponse();
-        response.setMetadata(metadata.getMetadata());
+        response.setMetadata(record.getMetadata());
         return response;
     }
 
     @GetMapping("/file/{id:.*}")
     @ResponseBody
     public ResponseEntity<Resource> streamFile(@PathVariable String id) {
+        FileRecord record = this.store.getFileRecord(id);
         Resource file = this.store.getFileAsResource(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment; filename=\"" + file.getFilename() + "\"")
+                    "attachment; filename=\"" + record.getOriginalFilename() + "\"")
                 .body(file);
     }
 

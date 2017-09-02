@@ -32,30 +32,30 @@ public class FileStore {
     @Value("${upload.location}")
     private String upload_location;
 
-    public String storeFile(MultipartFile file, Map<String, String> metadata) { // TODO: needs to throw IOException, I think
-        String id = "None"; // TODO
+    public String storeFile(MultipartFile file, Map<String, String> metadata) throws IOException {
+        String id = ""; // TODO: Better default?
 
-        FileRecord record = new FileRecord(metadata);
-
+        // Create the ID
         try {
-            // Create the ID
             id = Utils.getSha1FromInputStream(file.getInputStream());
-            record.setId(id);
-
-            // Save the file to the upload folder
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(upload_location, file.getOriginalFilename());
-            Files.write(path, bytes);
-
-            record.setPath(path.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        // Store the record to the database
-        db.store(record);
+        // Save the file to the upload folder
+        byte[] bytes = file.getBytes();
+        Path path = Paths.get(upload_location, id + "-" + file.getOriginalFilename());
+        Files.write(path, bytes);
+
+        // Populate the record
+        FileRecord record = new FileRecord();
+        record.setId(id);
+        record.setMetadata(metadata);
+        record.setOriginalFilename(file.getOriginalFilename());
+        record.setStoredPath(path.toString());
+
+        // Store the record in the database
+        db.store(record); // TODO: check for errors?
 
         return id;
     }
@@ -66,8 +66,7 @@ public class FileStore {
 
     public Resource getFileAsResource(String id) {
         FileRecord record = this.getFileRecord(id);
-        Resource resource = appContext.getResource("file://" + record.getPath());
-        return resource;
+        return appContext.getResource("file://" + record.getStoredPath());
     }
 
     public List<FileRecord> getRecordsByMetadata(String field, String value) {

@@ -50,9 +50,10 @@ public class ControllerTest {
         dummyMetadata = new Hashtable<>();
         dummyMetadata.put("rab", "oof");
 
-        dummyFileRecord = new FileRecord(dummyMetadata);
+        dummyFileRecord = new FileRecord();
         dummyFileRecord.setId(dummyId);
-        dummyFileRecord.setPath("/blah");
+        dummyFileRecord.setMetadata(dummyMetadata);
+        dummyFileRecord.setStoredPath("/blah");
     }
 
     @Test
@@ -76,8 +77,10 @@ public class ControllerTest {
 
     @Test
     public void testMetadata() throws Exception {
-        given(this.controller.metadata(dummyId))
-                .willReturn(new MetadataResponse(dummyFileRecord));
+        MetadataResponse response = new MetadataResponse();
+        response.setMetadata(dummyFileRecord.getMetadata());
+
+        given(this.controller.metadata(dummyId)).willReturn(response);
 
         this.mvc.perform(get("/v1/metadata/"+dummyId))
                 .andExpect(status().isOk());

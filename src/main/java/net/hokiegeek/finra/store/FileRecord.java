@@ -9,12 +9,9 @@ public class FileRecord {
     @Id private String dbId;
 
     private String id;
-    private String path;
+    private String originalFilename;
+    private String storedPath;
     private Map<String, String> metadata;
-
-    public FileRecord(Map<String, String> metadata) {
-        this.metadata = metadata;
-    }
 
     public String getId() {
         return id;
@@ -24,20 +21,32 @@ public class FileRecord {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getOriginalFilename() {
+        return originalFilename;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
+
+    public String getStoredPath() {
+        return storedPath;
+    }
+
+    public void setStoredPath(String storedPath) {
+        this.storedPath = storedPath;
     }
 
     public Map<String, String> getMetadata() {
         return new HashMap(this.metadata);
     }
 
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = new HashMap(metadata);
+    }
+
     @Override
     public String toString() {
-        return id;
+        return this.originalFilename + ": " + this.id;
     }
 }
