@@ -47,8 +47,9 @@ Available configuration options:
 
 |Property|Default value|Description|
 |--------|-------------|-----------|
-|upload-location|/var/cache/finra-test|Location on disk where the files will be stored|
-|metadata-database|mongodb|The type of database to connect to. Only ```mongodb``` is supported|
+|upload.location|/var/cache/finra-test|Location on disk where the files will be stored|
+|metadata.database|mongodb|The type of database to connect to. Only ```mongodb``` is supported|
+|api.version|1|The version of this API|
 |spring.data.mongodb.host|mongodb|Hostname to use to connect to the mongodb instance|
 
 ## Testing

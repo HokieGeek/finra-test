@@ -23,7 +23,7 @@ import net.hokiegeek.finra.store.FileMetadata;
 import net.hokiegeek.finra.store.FileStore;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v${api.version}")
 public class Controller {
 
     private final Logger log = Logger.getLogger(Controller.class.getName());

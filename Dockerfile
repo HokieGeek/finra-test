@@ -7,8 +7,8 @@ WORKDIR /app
 EXPOSE 8080
 
 # read in application.properties and setup upload-location properly
-RUN mkdir -p $(awk -F= '$1 ~ /upload-location/ { print $2 }' application.properties)
-RUN chmod 777 $(awk -F= '$1 ~ /upload-location/ { print $2 }' application.properties)
+RUN mkdir -p $(awk -F= '$1 ~ /upload.location/ { print $2 }' application.properties)
+RUN chmod 777 $(awk -F= '$1 ~ /upload.location/ { print $2 }' application.properties)
 
 RUN ./gradlew build
 

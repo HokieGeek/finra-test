@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Service
 public class FileStore {
-    @Qualifier("${metadata-database}")
+    @Qualifier("${metadata.database}")
     private final FileMetadataDB db;
     private final ApplicationContext appContext;
 
@@ -27,7 +27,7 @@ public class FileStore {
         this.db = db;
     }
 
-    @Value("${upload-location}")
+    @Value("${upload.location}")
     private String upload_location;
 
     public String storeFile(MultipartFile file, Map<String, String> metadata) { // TODO: needs to throw IOException, I think
