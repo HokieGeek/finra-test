@@ -37,9 +37,8 @@ public class Controller {
     @PostMapping("/upload")
     public UploadResponse upload(@RequestParam("file") MultipartFile file,
                                  @RequestParam Map<String, String> metadata) {
-        // TODO: handle metadata
         log.finest("Received file to upload: " + file.getOriginalFilename());
-        // TODO: handle error
+        // TODO: handle errors
         return new UploadResponse(this.store.storeFile(file, metadata));
     }
 

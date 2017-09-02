@@ -68,7 +68,7 @@ public class ControllerTest {
         MockMultipartFile mockMultipartFile = null;
         mockMultipartFile = new MockMultipartFile("fileName", "asdfsadfasdfasdf".getBytes());
 
-        this.mvc.perform(fileUpload("/upload")
+        this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
                     .param("rab", "oof")
                     .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -88,11 +88,11 @@ public class ControllerTest {
     }
 
     @Test
-    public void testInfo() throws Exception {
+    public void testMetadata() throws Exception {
         given(this.controller.metadata(dummyId))
                 .willReturn(new MetadataResponse(dummyFileMetadata));
 
-        this.mvc.perform(get("/info/"+dummyId))
+        this.mvc.perform(get("/v1/metadata/"+dummyId))
                 .andExpect(status().isOk());
                 // .accept(MediaType.APPLICATION_JSON_UTF8)
                 // .andDo(print())

@@ -22,7 +22,7 @@ public class FileStoreTest {
     @Ignore("TODO")
     public void testGetFileMetadata() {
         // FileMetadata getFileMetadata(String id)
-        return db.getById(id);
+        // return db.getById(id);
     }
 
     @Test
