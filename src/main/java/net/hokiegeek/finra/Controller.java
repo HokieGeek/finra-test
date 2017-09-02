@@ -2,6 +2,8 @@ package net.hokiegeek.finra;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,19 +42,30 @@ public class Controller {
                                  @RequestParam Map<String, String> metadata) {
         log.finest("Received file to upload: " + file.getOriginalFilename());
         // TODO: handle errors
-        return new UploadResponse(this.store.storeFile(file, metadata));
+        String id = this.store.storeFile(file, metadata);
+        return new UploadResponse(id);
     }
 
     @GetMapping("/metadata/{id:.*}")
     public MetadataResponse metadata(@PathVariable String id) {
-        return new MetadataResponse(this.store.getFileMetadata(id));
+        FileMetadata metadata = this.store.getFileMetadata(id);
+        return new MetadataResponse(metadata);
     }
 
     @GetMapping("/file/{id:.*}")
     @ResponseBody
     public ResponseEntity<Resource> streamFile(@PathVariable String id) {
         Resource file = this.store.getFileAsResource(id);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
+    @PostMapping("/search")
+    public List<String> search(@RequestParam Map<String, String> criterion) {
+        List<String> ids = new ArrayList<>();
+        // TODO: for each criteria, do a find in the database
+        return ids;
     }
 }
