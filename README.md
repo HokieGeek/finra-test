@@ -1,7 +1,7 @@
 finra-test
 ==========
 
-Simple REST service for storing files and associated metadata using Spring and MongoDB
+Simple REST service for storing files and associated metadata using Spring and MongoDB.
 
 ## Execution
 
@@ -13,7 +13,7 @@ This will start the MongoDB instance as well as build and run the Spring Boot se
 To start it in daemon mode, pass the option ```-d``` to the compose call.
 
 ### Stopping
-To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the ```docker-compose stop``` command
+To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the ```docker-compose down``` command
 
 ## API
 
@@ -38,6 +38,17 @@ http://localhost:8080/search
 
 Expects multipart post where the parameters are the search criteria matching the metadata.
 Returns a list of matching file IDs.
+
+## Configuration
+
+All configuration is located in the ```application.properties``` file.
+
+Available configuration values:
+
+||Property||Default value||Description||
+|upload-location|/var/cache/finra-test|Location on disk where the files will be stored|
+|metadata-database|mongodb|The type of database to connect to. Only ```mongodb``` is supported|
+|spring.data.mongodb.host|mongodb|Hostname to use to connect to the mongodb instance|
 
 ## Testing
 
