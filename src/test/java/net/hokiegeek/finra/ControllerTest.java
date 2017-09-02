@@ -13,8 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import net.hokiegeek.finra.responses.UploadResponse;
@@ -61,13 +64,15 @@ public class ControllerTest {
         MockMultipartFile mockMultipartFile = null;
         mockMultipartFile = new MockMultipartFile("file", "asdfsadfasdfasdf".getBytes());
 
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.setAll(dummyMetadata);
+
         given(this.controller.upload(mockMultipartFile, dummyMetadata))
                 .willReturn(new UploadResponse(dummyId));
 
         this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
-                    // .params(dummyMetadata) // TODO: needs to be a MultiValueMap
-                    // .param("rab", "oof")
+                    .params(params)
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andExpect(status().isOk())
@@ -107,10 +112,10 @@ public class ControllerTest {
         // given(this.controller.metadata(dummyId))
         //         .willReturn(new MetadataResponse(dummyFileRecord));
 
-        this.mvc.perform(post("/v1/search))
+        this.mvc.perform(post("/v1/search")
                 .param("", "")
+                ) ;
                 // .andExpect(status().isOk())
-                ;
                 // .accept(MediaType.APPLICATION_JSON_UTF8)
                 // .andDo(print())
                 // .andExpect(content().string("foobar"));
