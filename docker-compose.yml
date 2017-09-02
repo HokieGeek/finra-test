@@ -1,9 +1,11 @@
 version: '2'
 services:
-    db:
+    mongodb:
         image: mongo:latest
         ports:
             - 27017:27017
+        networks:
+            - default
     finra:
         build:
             context: .
@@ -11,6 +13,8 @@ services:
         ports:
             - 8080:8080
         depends_on:
-            - db
+            - mongodb
+        networks:
+            - default
         logging:
             driver: json-file

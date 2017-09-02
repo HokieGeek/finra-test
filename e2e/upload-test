@@ -1,23 +1,72 @@
 #!/bin/bash
 
-server="http://localhost:8080"
+server="http://localhost:8080/v1"
 
-created=$(mktemp)
-downloaded=$(mktemp)
-trap 'rm -rf ${created} ${downloaded}' EXIT
+tmpFiles=()
+tmp() {
+    f=$(mktemp)
+    tmpFiles+=(${f})
+    echo ${f}
+}
+trap 'rm -rf ${tmpFiles[@]}' EXIT
 
-cat << EOF > ${created}
-${@:-"SOMETHING"}
+declare -A uploadedFiles
+declare -A uploadedFilesParams
+
+genMetadata() {
+    local f=$1
+    stat --printf="user=%U\npermissions=%a\ncreated=%Y" $1
+}
+
+getMetadataFromJSON() {
+    # TODO
+    :
+}
+
+uploadFile() {
+    # local created=$(tmp)
+    local created=$1
+
+    ## Generate random data for the file
+    cat << EOF > ${created}
+    $(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n $((RANDOM%100)) | tr -d '\n')
 EOF
 
-id=$(curl --silent -F "file=@${created}" -F "blah=foo" \
-    ${server}/upload | sed -r 's/[{}]//g;s/.*:"([^"]*)"$/\1/')
-echo "ID: ${id}"
+    ## Create some parameters
+    params=()
+    for param in $(genMetadata ${created}); do
+        params+=("-F" "${param}")
+    done
 
-curl --silent ${server}/info/${id}
-echo ""
+    id=$(curl --silent \
+            -F "file=@${created}" \
+            "${params[@]}" \
+        ${server}/upload | sed -r 's/[{}]//g;s/.*:"([^"]*)"$/\1/')
 
-curl --silent -o ${downloaded} ${server}/file/${id}
+    echo ${id}
+}
 
-cat ${downloaded}
-diff -s ${created} ${downloaded}
+verifyFile() {
+    local id=$1
+
+    # TODO
+    curl --silent ${server}/metadata/${id}
+    echo ""
+
+    downloaded=$(tmp)
+    curl --silent -o ${downloaded} ${server}/file/${id}
+
+    diff ${uploadedFiles[${id}]} ${downloaded}
+}
+
+## Generate a random number of files between 1 and 10
+for i in $(seq 1 $((RANDOM%11))); do
+    created=$(tmp)
+    id=$(uploadFile ${created})
+    uploadedFiles[${id}]=${created}
+done
+
+## Verify each file created
+for id in "${!uploadedFiles[@]}"; do
+    verifyFile ${id} || exit 1
+done

@@ -1,10 +1,11 @@
 FROM openjdk:8
 
+EXPOSE 8080
+
 RUN mkdir /app
-COPY . /app
 WORKDIR /app
 
-EXPOSE 8080
+COPY . /app
 
 # read in application.properties and setup upload-location properly
 RUN mkdir -p $(awk -F= '$1 ~ /upload.location/ { print $2 }' application.properties)

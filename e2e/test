@@ -3,8 +3,16 @@
 here=$(cd ${0%/*}; pwd)
 cd ${here}/..
 
-docker-compose up
+docker-compose up -d
+sleep 8s
 
-${here}/upload-test $(date)
+${here}/upload-test
+ret=$?
 
 docker-compose down
+
+echo -n "Finished: "
+(( ${ret} == 0 )) && echo -en "\033[32mSUCCESS" || echo -en "\033[31mFAILURE"
+echo -e "\033[0m"
+
+exit ${ret}
