@@ -21,9 +21,13 @@ import java.util.Map;
 
 @Repository
 public class FileStore {
+    private final ApplicationContext appContext;
+
     @Qualifier("${metadata.database}")
     private final FileRecordDB db;
-    private final ApplicationContext appContext;
+
+    @Value("${upload.location}")
+    private String upload_location;
 
     @Autowired
     public FileStore(ApplicationContext context, FileRecordDB db) {
@@ -31,10 +35,7 @@ public class FileStore {
         this.db = db;
     }
 
-    @Value("${upload.location}")
-    private String upload_location;
-
-    public String storeFile(MultipartFile file, Map<String, String> metadata) throws IOException {
+    public synchronized String storeFile(MultipartFile file, Map<String, String> metadata) throws IOException {
         String id = null;
 
         // Create the ID
@@ -67,7 +68,7 @@ public class FileStore {
         return id;
     }
 
-    public boolean deleteFileById(String id) {
+    public synchronized boolean deleteFileById(String id) {
         FileRecord record = this.getFileRecord(id);
 
         try {
@@ -86,24 +87,24 @@ public class FileStore {
         }
     }
 
-    public Long count() {
+    public synchronized Long count() {
         return db.count();
     }
 
-    public List<FileRecord> getAllRecords() {
+    public synchronized List<FileRecord> getAllRecords() {
         return db.getAll();
     }
 
-    public FileRecord getFileRecord(String id) {
+    public synchronized FileRecord getFileRecord(String id) {
         return db.getById(id);
     }
 
-    public Resource getFileAsResource(String id) {
+    public synchronized Resource getFileAsResource(String id) {
         FileRecord record = this.getFileRecord(id);
         return appContext.getResource("file://" + record.getStoredPath());
     }
 
-    public List<FileRecord> getRecordsByMetadata(Map<String, String> metadata) {
+    public synchronized List<FileRecord> getRecordsByMetadata(Map<String, String> metadata) {
         return db.getByMetadata(metadata);
     }
 }
