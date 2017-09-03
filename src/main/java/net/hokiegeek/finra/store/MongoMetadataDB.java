@@ -24,8 +24,18 @@ public class MongoMetadataDB implements FileRecordDB {
     }
 
     @Override
+    public Long count() {
+        return this.db.count();
+    }
+
+    @Override
     public FileRecord getById(String id) {
         return this.db.findById(id);
+    }
+
+    @Override
+    public List<FileRecord> getAll() {
+        return this.db.findAll();
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,10 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Repository
 public class FileStore {
     @Qualifier("${metadata.database}")
     private final FileRecordDB db;
@@ -50,6 +51,7 @@ public class FileStore {
         // Populate the record
         FileRecord record = new FileRecord();
         record.setId(id);
+        record.setStoredTimestamp(new Date());
         record.setMetadata(metadata);
         record.setOriginalFilename(file.getOriginalFilename());
         record.setStoredPath(path.toString());
@@ -58,6 +60,14 @@ public class FileStore {
         db.store(record); // TODO: check for errors?
 
         return id;
+    }
+
+    public Long count() {
+        return db.count();
+    }
+
+    public List<FileRecord> getAllRecords() {
+        return db.getAll();
     }
 
     public FileRecord getFileRecord(String id) {

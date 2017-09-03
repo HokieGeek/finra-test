@@ -2,6 +2,7 @@ package net.hokiegeek.finra.store;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ public class FileRecord {
     @Id private String dbId;
 
     private String id;
+    private Date storedTimestamp;
     private String originalFilename;
     private String storedPath;
     private Map<String, String> metadata;
@@ -19,6 +21,14 @@ public class FileRecord {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getStoredTimestamp() {
+        return storedTimestamp;
+    }
+
+    public void setStoredTimestamp(Date storedTimestamp) {
+        this.storedTimestamp = storedTimestamp;
     }
 
     public String getOriginalFilename() {
