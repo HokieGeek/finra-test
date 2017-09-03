@@ -3,7 +3,7 @@
 here=$(cd ${0%/*}; pwd)
 cd ${here}/..
 
-docker-compose up -d
+docker-compose up -d --build
 sleep 8s
 
 ${here}/upload-test

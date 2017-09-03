@@ -11,6 +11,6 @@ COPY . /app
 RUN mkdir -p $(awk -F= '$1 ~ /upload.location/ { print $2 }' application.properties)
 RUN chmod 777 $(awk -F= '$1 ~ /upload.location/ { print $2 }' application.properties)
 
-RUN ./gradlew build
+RUN ./gradlew test build
 
 CMD java -jar build/libs/finra-test-0.1.0.jar
