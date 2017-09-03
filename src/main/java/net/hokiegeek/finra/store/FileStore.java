@@ -62,6 +62,25 @@ public class FileStore {
         return id;
     }
 
+    public boolean deleteFileById(String id) {
+        FileRecord record = this.getFileRecord(id);
+
+        try {
+            db.delete(id);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        boolean deleted = false;
+        try {
+            deleted = Files.deleteIfExists(Paths.get(record.getStoredPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            return deleted;
+        }
+    }
+
     public Long count() {
         return db.count();
     }

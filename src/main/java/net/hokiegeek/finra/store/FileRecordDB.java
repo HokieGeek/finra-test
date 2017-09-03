@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface FileRecordDB {
     public void store(FileRecord record);
+    public void delete(String id) throws IllegalArgumentException;
     public Long count();
     public FileRecord getById(String id);
     public List<FileRecord> getAll();

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 
+import java.lang.IllegalArgumentException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,11 @@ public class MongoMetadataDB implements FileRecordDB {
     @Override
     public void store(FileRecord record) {
         this.db.save(record);
+    }
+
+    @Override
+    public void delete(String id) throws IllegalArgumentException {
+        this.db.delete(id);
     }
 
     @Override
