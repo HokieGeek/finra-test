@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +35,7 @@ public class FileStore {
     private String upload_location;
 
     public String storeFile(MultipartFile file, Map<String, String> metadata) throws IOException {
-        String id = ""; // TODO: Better default?
+        String id = null;
 
         // Create the ID
         try {
@@ -44,9 +45,12 @@ public class FileStore {
         }
 
         // Save the file to the upload folder
-        byte[] bytes = file.getBytes();
         Path path = Paths.get(upload_location, id + "-" + file.getOriginalFilename());
-        Files.write(path, bytes);
+        try {
+            file.transferTo(new File(path.toString()));
+        } catch (java.lang.IllegalStateException e) {
+            e.printStackTrace();
+        }
 
         // Populate the record
         FileRecord record = new FileRecord();
@@ -54,6 +58,7 @@ public class FileStore {
         record.setStoredTimestamp(new Date());
         record.setMetadata(metadata);
         record.setOriginalFilename(file.getOriginalFilename());
+        record.setContentLength(file.getSize());
         record.setStoredPath(path.toString());
 
         // Store the record in the database

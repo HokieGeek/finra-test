@@ -12,6 +12,7 @@ public class FileRecord {
     private String id;
     private Date storedTimestamp;
     private String originalFilename;
+    private Long contentLength;
     private String storedPath;
     private Map<String, String> metadata;
 
@@ -37,6 +38,14 @@ public class FileRecord {
 
     public void setOriginalFilename(String originalFilename) {
         this.originalFilename = originalFilename;
+    }
+
+    public Long getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(Long contentLength) {
+        this.contentLength = contentLength;
     }
 
     public String getStoredPath() {
