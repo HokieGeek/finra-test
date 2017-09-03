@@ -67,8 +67,8 @@ public class ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.setAll(dummyMetadata);
 
-        given(this.controller.upload(mockMultipartFile, dummyMetadata))
-                .willReturn(new UploadResponse(dummyId));
+        // given(this.controller.upload(mockMultipartFile, dummyMetadata))
+        //         .willReturn(new UploadResponse(dummyId));
 
         this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
@@ -85,7 +85,7 @@ public class ControllerTest {
         MetadataResponse response = new MetadataResponse();
         response.setMetadata(dummyFileRecord.getMetadata());
 
-        given(this.controller.metadata(dummyId)).willReturn(response);
+        // given(this.controller.metadata(dummyId)).willReturn(response);
 
         this.mvc.perform(get("/v1/metadata/"+dummyId))
                 .andExpect(status().isOk());
