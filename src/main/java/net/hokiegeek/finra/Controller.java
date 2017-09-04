@@ -27,7 +27,7 @@ import net.hokiegeek.finra.store.FileRecord;
 import net.hokiegeek.finra.store.FileStore;
 
 @RestController
-@RequestMapping("/v${api.version}")
+@RequestMapping({"/v1/","/"})
 public class Controller {
 
     private static final Logger log = LoggerFactory.getLogger(Controller.class);
@@ -38,7 +38,7 @@ public class Controller {
         this.store = store;
     }
 
-    @PostMapping("/upload")
+    @PostMapping("upload")
     public ResponseEntity<UploadResponse> upload(@RequestPart("file") MultipartFile file,
                                                  @RequestParam Map<String, String> metadata) {
         log.info("Received file to upload: {}", file.getOriginalFilename());
@@ -57,7 +57,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/metadata/{id}")
+    @GetMapping("metadata/{id}")
     public ResponseEntity<MetadataResponse> metadata(@PathVariable String id) {
         log.info("Retrieving metadata for id {}", id);
 
@@ -72,7 +72,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/file/{id}")
+    @GetMapping("file/{id}")
     public ResponseEntity<Resource> streamFile(@PathVariable String id) {
         log.info("Retrieving file with id {}", id);
 
@@ -99,7 +99,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping("search")
     public List<String> search(@RequestParam Map<String, String> criterion) {
         log.trace("Searching by metadata");
 

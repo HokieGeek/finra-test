@@ -1,7 +1,6 @@
 #!/bin/bash
 
-version=$(awk -F= '$1 ~ /api.version/ { print $2 }' application.properties)
-server="http://localhost:8080/v${version}"
+server="http://localhost:8080"
 
 tmpFiles=()
 tmp() {

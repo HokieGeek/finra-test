@@ -18,22 +18,26 @@ To stop the service, simply Ctrl-C or, if started in daemon mode, then issue the
 ## API
 
 #### Upload file
+http://localhost:8080/upload
 http://localhost:8080/v1/upload
 
 Expects multipart post where the file is parameter ```file``` and all other parameters are assumed to be metadata.
 Returns the ID generated for the file.
 
 #### Retrieve file metadata
+http://localhost:8080/metadata/{id}
 http://localhost:8080/v1/metadata/{id}
 
 Given a file ID, it returns all metadata associated with the file.
 
 #### Retrieve file
+http://localhost:8080/file/{id}
 http://localhost:8080/v1/file/{id}
 
 Given a file ID, it initiates a content stream of the file.
 
 #### Retrieve IDs of files matching metadata
+http://localhost:8080/search
 http://localhost:8080/v1/search
 
 A get request where the query parameters are the search criteria matching the metadata.
@@ -47,7 +51,6 @@ Available configuration options:
 
 |Property|Default value|Description|
 |--------|-------------|-----------|
-|api.version|1|The version of this API|
 |upload.location|/var/cache/finra-test|Location on disk where the files will be stored|
 |metadata.database|mongodb|The type of database to connect to. Only ```mongodb``` is supported|
 |spring.data.mongodb.host|mongodb|Hostname to use to connect to the mongodb instance|
