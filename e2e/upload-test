@@ -73,6 +73,8 @@ for i in $(seq 1 $((RANDOM%11))); do
     id=$(uploadFile ${created} ${extra_metadata})
     unset extra_metadata
 
+    [[ -z ${id} ]] && exit 1
+
     uploadedFiles[${id}]=${created}
 done
 
@@ -83,5 +85,4 @@ done
 
 echo "Testing search"
 curl --silent \
-     -F "extra=foo" \
-     ${server}/search | sed -r 's/(\[|])//g;s/,/\n/g'
+     ${server}/search?extra=foo | sed -r 's/(\[|])//g;s/,/\n/g'

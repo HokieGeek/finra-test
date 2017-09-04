@@ -57,7 +57,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/metadata/{id:.*}")
+    @GetMapping("/metadata/{id}")
     public ResponseEntity<MetadataResponse> metadata(@PathVariable String id) {
         log.info("Retrieving metadata for id {}", id);
 
@@ -72,7 +72,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/file/{id:.*}")
+    @GetMapping("/file/{id}")
     public ResponseEntity<Resource> streamFile(@PathVariable String id) {
         log.info("Retrieving file with id {}", id);
 
@@ -99,7 +99,7 @@ public class Controller {
         }
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public List<String> search(@RequestParam Map<String, String> criterion) {
         log.trace("Searching by metadata");
 

@@ -99,7 +99,7 @@ public class ControllerTest {
         // given(this.controller.metadata(dummyId))
         //         .willReturn(new MetadataResponse(dummyFileRecord));
 
-        this.mvc.perform(get("/v1/file/"+dummyId))
+        this.mvc.perform(get("/v1/files/"+dummyId))
                 .andExpect(status().isOk());
                 // .accept(MediaType.APPLICATION_JSON_UTF8)
                 // .andDo(print())

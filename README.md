@@ -26,7 +26,7 @@ Returns the ID generated for the file.
 #### Retrieve file metadata
 http://localhost:8080/v1/metadata/{id}
 
-Given a file ID, it returns the filename and all metadata associated with the file.
+Given a file ID, it returns all metadata associated with the file.
 
 #### Retrieve file
 http://localhost:8080/v1/file/{id}
@@ -36,7 +36,7 @@ Given a file ID, it initiates a content stream of the file.
 #### Retrieve IDs of files matching metadata
 http://localhost:8080/v1/search
 
-Expects multipart post where the parameters are the search criteria matching the metadata.
+A get request where the query parameters are the search criteria matching the metadata.
 Returns a list of matching file IDs.
 
 ## Configuration
