@@ -3,13 +3,14 @@ package net.hokiegeek.finra.store;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import net.hokiegeek.finra.store.FileRecordDB;
 
-public class FileStoreTest {
-    @MockBean
-    private FileRecordDB mockDb;
+public class AlertsTest {
+    // private FileStore store;
+
+    // @MockBean
+    // private FileRecordDB mockDb;
 
     @Before
     public void setup() {
@@ -17,21 +18,14 @@ public class FileStoreTest {
 
     @Test
     @Ignore("TODO")
-    public void testStoreFile() {
+    public void testPollForNewItems() {
         // String storeFile(MultipartFile file, Map<String, String> metadata) {
     }
 
-
     @Test
     @Ignore("TODO")
-    public void testGetFileRecord() {
-        // FileRecord getFileRecord(String id)
-        // return db.getById(id);
-    }
-
-    @Test
-    @Ignore("TODO")
-    public void testGetFileAsResource() {
+    public void testSendNewItemAlert() {
         // Resource getFileAsResource(String id)
     }
 }
+

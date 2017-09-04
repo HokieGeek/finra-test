@@ -92,6 +92,7 @@ public class ControllerTest {
                 .andDo(print());
     }
 
+    /*
     @Test
     @Ignore("need to send out Resource object")
     public void testFileDownload() throws Exception {
@@ -102,6 +103,7 @@ public class ControllerTest {
                 .andExpect(content().string("dummy"))
                 .andDo(print());
     }
+    */
 
     @Test
     public void testSearch() throws Exception {
