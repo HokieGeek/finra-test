@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.hokiegeek.finra.responses.MetadataResponse;
-import net.hokiegeek.finra.responses.UploadResponse;
 import net.hokiegeek.finra.store.FileRecord;
 import net.hokiegeek.finra.store.FileStore;
 
@@ -39,7 +37,7 @@ public class Controller {
     }
 
     @PostMapping("upload")
-    public ResponseEntity<UploadResponse> upload(@RequestPart("file") MultipartFile file,
+    public ResponseEntity<String> upload(@RequestPart("file") MultipartFile file,
                                                  @RequestParam Map<String, String> metadata) {
         log.info("Received file to upload: {}", file.getOriginalFilename());
 
@@ -52,13 +50,13 @@ public class Controller {
             if (id == null) {
                 return ResponseEntity.notFound().build();
             } else {
-                return ResponseEntity.ok(new UploadResponse(id));
+                return ResponseEntity.ok(id);
             }
         }
     }
 
     @GetMapping("metadata/{id}")
-    public ResponseEntity<MetadataResponse> metadata(@PathVariable String id) {
+    public ResponseEntity<Map<String, String>> metadata(@PathVariable String id) {
         log.info("Retrieving metadata for id {}", id);
 
         FileRecord record = this.store.getFileRecord(id);
@@ -66,9 +64,7 @@ public class Controller {
         if (record == null) {
             return ResponseEntity.notFound().build();
         } else {
-            MetadataResponse response = new MetadataResponse();
-            response.setMetadata(record.getMetadata());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(record.getMetadata());
         }
     }
 

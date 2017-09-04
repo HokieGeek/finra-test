@@ -20,8 +20,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import net.hokiegeek.finra.responses.UploadResponse;
-import net.hokiegeek.finra.responses.MetadataResponse;
 import net.hokiegeek.finra.store.FileRecord;
 
 import static org.assertj.core.api.Assertions.*;
@@ -68,7 +66,7 @@ public class ControllerTest {
         params.setAll(dummyMetadata);
 
         // given(this.controller.upload(mockMultipartFile, dummyMetadata))
-        //         .willReturn(new UploadResponse(dummyId));
+        //         .willReturn(dummyId);
 
         this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
@@ -82,13 +80,11 @@ public class ControllerTest {
 
     @Test
     public void testMetadata() throws Exception {
-        MetadataResponse response = new MetadataResponse();
-        response.setMetadata(dummyFileRecord.getMetadata());
-
-        // given(this.controller.metadata(dummyId)).willReturn(response);
+        // given(this.controller.metadata(dummyId)).willReturn(dummyFileRecord.getMetadata());
 
         this.mvc.perform(get("/v1/metadata/"+dummyId))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                ;
                 // .accept(MediaType.APPLICATION_JSON_UTF8)
                 // .andExpect(content().string("foobar"));
     }
@@ -97,7 +93,7 @@ public class ControllerTest {
     @Ignore("TODO")
     public void testFileDownload() throws Exception {
         // given(this.controller.metadata(dummyId))
-        //         .willReturn(new MetadataResponse(dummyFileRecord));
+        //         .willReturn(dummyFileRecord);
 
         this.mvc.perform(get("/v1/files/"+dummyId))
                 .andExpect(status().isOk());
@@ -110,7 +106,7 @@ public class ControllerTest {
     @Ignore("TODO")
     public void testSearch() throws Exception {
         // given(this.controller.metadata(dummyId))
-        //         .willReturn(new MetadataResponse(dummyFileRecord));
+        //         .willReturn(dummyFileRecord);
 
         this.mvc.perform(post("/v1/search")
                 .param("", "")
