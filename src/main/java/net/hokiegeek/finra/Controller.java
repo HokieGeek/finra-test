@@ -81,10 +81,12 @@ public class Controller {
             try {
                 fileContentLength = file.contentLength();
             } catch (IOException e) {
+                log.error("Could not access file's size: {}", record.getContentLength());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
 
             if (fileContentLength != record.getContentLength()) {
+                log.error("Actuual file's size does not match file size in DB record");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             } else {
                 return ResponseEntity.ok()

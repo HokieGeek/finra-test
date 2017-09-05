@@ -10,7 +10,11 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Utils {
-    public static String getSha1FromInputStream(InputStream inputStream) throws IOException, NoSuchAlgorithmException {
+    public static String getSha1FromInputStream(InputStream inputStream) throws IllegalArgumentException, IOException, NoSuchAlgorithmException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("Input stream cannot be null");
+        }
+
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
 
         int numBytesRead = 0;

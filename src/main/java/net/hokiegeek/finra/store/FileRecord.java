@@ -57,11 +57,19 @@ public class FileRecord {
     }
 
     public Map<String, String> getMetadata() {
-        return new HashMap(this.metadata);
+        if (this.metadata == null) {
+            return null;
+        } else {
+            return new HashMap(this.metadata);
+        }
     }
 
     public void setMetadata(Map<String, String> metadata) {
-        this.metadata = new HashMap(metadata);
+        if (metadata == null) {
+            this.metadata = null;
+        } else {
+            this.metadata = new HashMap(metadata);
+        }
     }
 
     @Override

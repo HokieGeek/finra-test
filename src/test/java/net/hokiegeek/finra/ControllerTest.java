@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.*;
 import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.core.io.PathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -48,6 +50,7 @@ public class ControllerTest {
     private static String dummyId;
     private static Map<String, String> dummyMetadata;
     private static FileRecord dummyFileRecord;
+    private static MockMultipartFile mockMultipartFile;
 
     @BeforeClass
     public static void setupData() {
@@ -60,18 +63,18 @@ public class ControllerTest {
         dummyFileRecord.setId(dummyId);
         dummyFileRecord.setMetadata(dummyMetadata);
         dummyFileRecord.setStoredPath("/blah");
+
+        mockMultipartFile = new MockMultipartFile("file", "asdfsadfasdfasdf".getBytes());
     }
 
     @Test
     public void testUpload() throws Exception {
-        MockMultipartFile mockMultipartFile = null;
-        mockMultipartFile = new MockMultipartFile("file", "asdfsadfasdfasdf".getBytes());
+        when(this.mockFileStore.storeFile(mockMultipartFile, dummyMetadata)).thenReturn(dummyId);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.setAll(dummyMetadata);
 
-        when(this.mockFileStore.storeFile(mockMultipartFile, dummyMetadata)).thenReturn(dummyId);
-
+        // Coming up roses test
         this.mvc.perform(fileUpload("/v1/upload")
                     .file(mockMultipartFile)
                     .params(params)
@@ -80,46 +83,69 @@ public class ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(dummyId))
                 .andDo(print());
+
+        // Destructive test
+        this.mvc.perform(fileUpload("/v1/upload")
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 
     @Test
     public void testMetadata() throws Exception {
         when(this.mockFileStore.getFileRecord(dummyId)).thenReturn(dummyFileRecord);
 
+        // Valid ID
         this.mvc.perform(get("/v1/metadata/"+dummyId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(dummyFileRecord.getMetadata())))
                 .andDo(print());
-    }
 
-    /*
-    @Test
-    @Ignore("need to send out Resource object")
-    public void testFileDownload() throws Exception {
-        when(this.mockFileStore.getFileAsResource(dummyId)).thenReturn("TODO");
+        // Invalid ID
+        this.mvc.perform(get("/v1/metadata/foobar"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
 
-        this.mvc.perform(get("/v1/files/"+dummyId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("dummy"))
+        // No ID
+        this.mvc.perform(get("/v1/metadata"))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
-    */
+
+    @Test
+    public void testStreamFile() throws Exception {
+        when(this.mockFileStore.getFileRecord(dummyId)).thenReturn(dummyFileRecord);
+        Resource dummyFile = new PathResource(dummyFileRecord.getStoredPath());
+        when(this.mockFileStore.getFileAsResource(dummyId)).thenReturn(dummyFile);
+
+        this.mvc.perform(get("/v1/file/"+dummyId))
+                .andExpect(status().is5xxServerError()) // This is because I still need to mock up the resource object
+                .andDo(print());
+    }
 
     @Test
     public void testSearch() throws Exception {
+        List<FileRecord> returnedRecords = Arrays.asList(dummyFileRecord);
+
+        when(this.mockFileStore.getRecordsByMetadata(dummyMetadata)).thenReturn(returnedRecords);
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.setAll(dummyMetadata);
 
-        List<FileRecord> returnedRecords = Arrays.asList(dummyFileRecord);
         List<String> returnedIds = Arrays.asList(dummyId);
-
-        when(this.mockFileStore.getRecordsByMetadata(dummyMetadata)).thenReturn(returnedRecords);
 
         this.mvc.perform(get("/v1/search")
                     .params(params)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(returnedIds)))
+                .andDo(print());
+
+        // Test with no params
+        this.mvc.perform(get("/v1/search"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"))
                 .andDo(print());
     }
 }

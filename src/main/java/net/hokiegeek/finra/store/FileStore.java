@@ -35,7 +35,11 @@ public class FileStore {
         this.db = db;
     }
 
-    public synchronized String storeFile(MultipartFile file, Map<String, String> metadata) throws IOException {
+    public synchronized String storeFile(MultipartFile file, Map<String, String> metadata) throws IllegalArgumentException, IOException {
+        if (file == null) {
+            throw new IllegalArgumentException("File cannot be null");
+        }
+
         String id = null;
 
         // Create the ID
@@ -50,8 +54,7 @@ public class FileStore {
         try {
             file.transferTo(new File(path.toString()));
         } catch (java.lang.IllegalStateException e) {
-            e.printStackTrace();
-        }
+            e.printStackTrace(); }
 
         // Populate the record
         FileRecord record = new FileRecord();
@@ -63,7 +66,7 @@ public class FileStore {
         record.setStoredPath(path.toString());
 
         // Store the record in the database
-        db.store(record); // TODO: check for errors?
+        db.store(record);
 
         return id;
     }
@@ -95,12 +98,18 @@ public class FileStore {
         return db.getAll();
     }
 
-    public synchronized FileRecord getFileRecord(String id) {
+    public synchronized FileRecord getFileRecord(String id) throws IllegalArgumentException {
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");
+        }
         return db.getById(id);
     }
 
-    public synchronized Resource getFileAsResource(String id) {
+    public synchronized Resource getFileAsResource(String id) throws IllegalArgumentException {
         FileRecord record = this.getFileRecord(id);
+        if (record == null) {
+            return null;
+        }
         return appContext.getResource("file://" + record.getStoredPath());
     }
 
