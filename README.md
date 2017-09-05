@@ -54,8 +54,14 @@ Available configuration options:
 |upload.location|/var/cache/finra-test|Location on disk where the files will be stored|
 |metadata.database|mongodb|The type of database to connect to. Only ```mongodb``` is supported|
 |spring.data.mongodb.host|mongodb|Hostname to use to connect to the mongodb instance|
-|alert.new-item.poll-rate.mins|60|The rate in which it should poll for new items in minutes|
+|alert.new-item.poll-rate.mins|3600000|The rate in which it should poll for new items in minutes|
 |alert.new-item.email|<none>|The email address to send new item alerts|
+|spring.mail.host|<none>|Must be filled in for email to work|
+|spring.mail.port|<none>|Must be filled in for email to work|
+|spring.mail.username|<none>|Must be filled in for email to work|
+|spring.mail.password|<none>|Must be filled in for email to work|
+|spring.mail.properties.mail.smtp.auth|<none>|Must be filled in for email to work|
+|spring.mail.properties.mail.smtp.starttls.enable|<none>|Must be filled in for email to work|
 
 ## Testing
 
