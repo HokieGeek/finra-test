@@ -64,6 +64,7 @@ verifyFile() {
 search_metadata="extra=foo"
 
 ## Generate a random number of files between 1 and 10
+echo ":: Creating and uploading files"
 for i in $(seq 1 $((RANDOM%11))); do
     created=$(tmp)
 
@@ -78,10 +79,11 @@ for i in $(seq 1 $((RANDOM%11))); do
 done
 
 ## Verify each file created
+echo ":: Verifying that the files download correctly"
 for id in "${!uploadedFiles[@]}"; do
     verifyFile ${id} || exit 1
 done
 
-echo "Testing search"
+echo "::Searching for IDs of files matching metadata: error=foo"
 curl --silent \
      ${server}/search?extra=foo | sed -r 's/(\[|])//g;s/,/\n/g'
